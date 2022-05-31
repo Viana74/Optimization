@@ -1,10 +1,9 @@
 % ############################################################################
 % Subject: Paticle Swarm Optimization
-% Authors: Éverton Viana, Mathias Titton
-% University: UFRGS
+% Authors: Ã‰verton Viana, Mathias Titton
 % Date: Dez./2019
 % 
-% Problem: Find the max value of the objective function f(x) bellow:
+% Problem: Find the max value of the objective function bellow:
 % f(x) = x*sin(10*pi*x)+1, where x_min <= x <= x_max com x \in R.
 % ############################################################################
 clc;
@@ -16,7 +15,7 @@ niter = 150;    % Number of iterations for each swarm.
 nenx = 20;      % Number of swarms (executions).
 x_min = -1;     % Minimal limit for search space.
 x_max = 3;      % Maximal limit for search space.
-v_min = -0.01;  % Minimum initial speed.
+v_min = -0.01;  % Minimal initial speed.
 v_max = 0.01;   % Maximal initial speed.
 
 % Weights w, c1, c2, r1 e r2.
@@ -30,7 +29,7 @@ c1 = X*phi1;
 c2 = X*phi2;
 
 % Animation:
-Plotar = 0;         % Plot figures / Create GIF? 0 = No, 1 = Yes.
+Plotar = 0;         % Plot figures / Generate a GIF? 0 = No, 1 = Yes.
 AnimEnx = 1;        % Define the number of the swarm (or execution) for creating the GIF.
 nitergif = niter;   % Gif iterations.
 
@@ -38,7 +37,7 @@ nitergif = niter;   % Gif iterations.
 fit = @(x) x.*sin(10*pi*x) + 1;
 
 %% Swarm movement!
-fprintf('Execuções: \n');
+fprintf('ExecuÃ§Ãµes: \n');
 for m = 1:nenx
     % Position and initial speed for each particle of the swarm (ramdomic):
     xx(:,1,m)  = x_min + (x_max-x_min)*rand(np,1);
@@ -52,14 +51,14 @@ for m = 1:nenx
     gg(1,1,m) = pp(pb,end,m);  
 
     for t = 1:niter    
-        % Updating of position and speed for each particle.
+        % Update the position and speed for each particle.
         for l = 1:np
-            % Update the coeficients r1 and r2.
+            % Updating the coefficients r1 and r2.
             r1 = rand(1);
             r2 = rand(1);              
             vv(l,t+1,m) = w*vv(l,t,m)+r1*c1*(pp(l,t,m)-xx(l,t,m))+r2*c2*(gg(:,t,m)-xx(l,t,m));
             
-            % Update the position.
+            % Update position.
             xx(l,t+1,m) = xx(l,t,m) + vv(l,t+1,m);
         
             % Position control to avoid over limit.
@@ -77,7 +76,7 @@ for m = 1:nenx
             end
         end
         
-        % Updating the global solution.
+        % Update global solution.
         [gb(:,t+1,m),pb] = max(fit(pp(:,t+1,m)));
         gg(:,t+1,m) = pp(pb,t+1,m);            
     end
@@ -85,7 +84,7 @@ for m = 1:nenx
     % Show solution.
     [best_finc(m,1),ind] = max(gb(1,:,m));
     best_xinc(m,1) = gg(1,ind,m);
-    msg = [num2str(m), '  Solução: x = ',num2str(best_xinc(m,1)), '; Fitness: ',num2str(best_finc(m,1))];
+    msg = [num2str(m), '  SoluÃ§Ã£o: x = ',num2str(best_xinc(m,1)), '; Fitness: ',num2str(best_finc(m,1))];
     disp(msg);
 end
 
@@ -94,15 +93,15 @@ fprintf('\n');
 [~,ind] = max(best_finc);
 [~,ind2] = min(best_finc);
 
-fprintf('Best solution in the %d ª iteration.\n', ind);
-fprintf('Worst solution in the %d ª iterairon.\n', ind2);
+fprintf('Best solution in the %d Âª iteration.\n', ind);
+fprintf('Worst solution in the %d Âª iterairon.\n', ind2);
 msg = ['Maximal fitness value: ',num2str(max(best_finc))];
 disp(msg);
-msg = ['Minilam fitness value: ',num2str(min(best_finc))];
+msg = ['Minimal fitness value: ',num2str(min(best_finc))];
 disp(msg);  
 fprintf('\n');
 
-%% Criação do GIF:
+%% GIF generate:
 if Plotar == 1
     h = figure;
     axis tight manual;   
